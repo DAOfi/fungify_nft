@@ -1,0 +1,23 @@
+{
+  "name": "fungify_nft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DAOfi/fungify_nft.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DAOfi/fungify_nft/issues"
+  },
+  "homepage": "https://github.com/DAOfi/fungify_nft#readme",
+  "devDependencies": {
+    "hardhat": "^2.1.1"
+  }
+}

@@ -12,7 +12,7 @@ contract Fraction is ERC20 {
     event Fraction(address nft, address owner, string name, string symbol, uint total);
     
     constructor (ERC721 _nft, uint _nftid, string memory _name, string memory _symbol, uint _total) ERC20(_name, _symbol) {
-        require(owner != address(0));
+        require(_total > 1);
         owner = msg.sender;
         nft = _nft;
         

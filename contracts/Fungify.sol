@@ -12,11 +12,10 @@ contract Fraction is IFractional, ERC20 {
     
     constructor (ERC721 _nft, uint[] memory _nftids, string memory _name, string memory _symbol, uint _total) ERC20(_name, _symbol) {
         require(_total > 1);
-        require(_nftids.length == 6);
         owner = msg.sender;
         nft = _nft;
         
-        for(uint i=0; i<6; i++) {
+        for(uint i=0; i<_nftids.length; i++) {
             _nft.transferFrom(msg.sender, address(this), _nftids[i]);
             require(_nft.ownerOf(_nftids[i]) == address(this), "nft transfer failed");
         }

@@ -10,19 +10,20 @@ contract Fraction is IFractional, ERC20 {
     address public owner;
     ERC721 public nft;
     
-    constructor (ERC721 _nft, uint[] memory _nftids, string memory _name, string memory _symbol, uint _total) ERC20(_name, _symbol) {
-        require(_total > 1);
-        owner = msg.sender;
+    constructor (ERC721 _nft, string memory _name, string memory _symbol) ERC20(_name, _symbol) {
+        owner = address(0); // Be explicit about no ownership
         nft = _nft;
-        
+    }
+
+    function fungify(uint[] memory _nftids, uint _total) public virtual override {
         for(uint i=0; i<_nftids.length; i++) {
-            _nft.transferFrom(msg.sender, address(this), _nftids[i]);
-            require(_nft.ownerOf(_nftids[i]) == address(this), "nft transfer failed");
+            nft.transferFrom(msg.sender, address(this), _nftids[i]);
+            require(nft.ownerOf(_nftids[i]) == address(this), "nft transfer failed");
         }
 
         _mint(msg.sender, _total * (10 ** uint256(decimals())));
         
-        emit Fraction(address(nft), address(owner), _name, _symbol, _total);
+        emit Fraction(address(nft), address(owner), name(), symbol(), _total);
     }
 }
 

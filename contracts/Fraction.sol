@@ -9,6 +9,7 @@ import "./IFractional.sol";
 contract Fraction is IFractional, ERC20 {
     address public owner;
     ERC721 public nft;
+    bool public locked = false;
     
     constructor (ERC721 _nft, string memory _name, string memory _symbol) ERC20(_name, _symbol) {
         owner = address(0); // Be explicit about no ownership
@@ -16,12 +17,16 @@ contract Fraction is IFractional, ERC20 {
     }
 
     function fungify(uint[] memory _nftids, uint _total) public virtual override {
+        require(locked == false);
+
         for(uint i=0; i<_nftids.length; i++) {
             nft.transferFrom(msg.sender, address(this), _nftids[i]);
             require(nft.ownerOf(_nftids[i]) == address(this), "nft transfer failed");
         }
 
         _mint(msg.sender, _total * (10 ** uint256(decimals())));
+
+        locked = true;
         
         emit Fraction(address(nft), address(owner), name(), symbol(), _total);
     }

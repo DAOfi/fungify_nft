@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { deployContract } from 'ethereum-waffle'
-import Fraction from '../artifacts/contracts/Fungify.sol/Fraction.json'
+import Fraction from '../artifacts/contracts/Fraction.sol/Fraction.json'
 
 async function main() {
   const provider = new ethers.providers.JsonRpcProvider(

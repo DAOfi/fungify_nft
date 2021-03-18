@@ -12,7 +12,7 @@ async function main() {
     wallet,
     Fraction,
     [
-      '0xbc27887edec00ad98c7207dfcd2525f39033ed19',
+      '0xc58e705be8d06fe529a698b6b522b98095e4438f',
       'IDMXERC20',
       'IDMXERC20'
     ],

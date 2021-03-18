@@ -8,7 +8,7 @@ async function main() {
   )
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY || '', provider)
   // console.log('Wallet:', wallet.address)
-  let fraction = new ethers.Contract('0xFD43208897448dDf38ABEAe5BD1F8A2Be1B809da', Fraction.abi, provider)
+  let fraction = new ethers.Contract('0xB84E429b71802decd65e1A6Fe197800D069A1ac6', Fraction.abi, provider)
   let fractionSigner = fraction.connect(wallet)
   let overrideOptions = {
       gasLimit: 5000000,

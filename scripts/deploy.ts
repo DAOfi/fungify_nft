@@ -13,8 +13,8 @@ async function main() {
     Fraction,
     [
       '0xc58e705be8d06fe529a698b6b522b98095e4438f',
-      'IDMXERC20',
-      'IDMXERC20'
+      'IDXMTILE001',
+      'IDXMTILE001'
     ],
     {
       chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 0x2A, // default to kovan (42)

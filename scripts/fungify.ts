@@ -4,25 +4,22 @@ import Fraction from '../artifacts/contracts/Fraction.sol/Fraction.json'
 
 async function main() {
   const provider = new ethers.providers.JsonRpcProvider(
-    process.env.JSONRPC_URL || 'https://kovan.poa.network'
+    process.env.JSONRPC_URL || 'hhttps://main-light.eth.linkpool.io'
   )
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY || '', provider)
   // console.log('Wallet:', wallet.address)
-  let fraction = new ethers.Contract('0xB84E429b71802decd65e1A6Fe197800D069A1ac6', Fraction.abi, provider)
+  let fraction = new ethers.Contract('0x21A870C7fce1BCe5d88bDF845Ac332C76204a9A0', Fraction.abi, provider)
+
   let fractionSigner = fraction.connect(wallet)
   let overrideOptions = {
-      gasLimit: 5000000,
+      gasLimit: 2000000,
+      gasPrice: ethers.utils.parseUnits('120', 'gwei')
   }
 
   let tokenIDs = [
-      ethers.BigNumber.from("1"),
-      ethers.BigNumber.from("2"),
-      ethers.BigNumber.from("3"),
-      ethers.BigNumber.from("4"),
-      ethers.BigNumber.from("5"),
-      ethers.BigNumber.from("6")
+      ethers.BigNumber.from("1")
   ]
-  let totalERC20 = ethers.BigNumber.from("888")
+  let totalERC20 = ethers.BigNumber.from("100")
 
   let fung = await fractionSigner.fungify(tokenIDs, totalERC20, overrideOptions)
 

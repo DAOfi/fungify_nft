@@ -4,7 +4,7 @@ import Fraction from '../artifacts/contracts/Fraction.sol/Fraction.json'
 
 async function main() {
   const provider = new ethers.providers.JsonRpcProvider(
-    process.env.JSONRPC_URL || 'https://kovan.poa.network'
+    process.env.JSONRPC_URL || 'https://main-light.eth.linkpool.io'
   )
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY || '', provider)
   console.log('Wallet:', wallet.address)
@@ -12,13 +12,13 @@ async function main() {
     wallet,
     Fraction,
     [
-      '0xc58e705be8d06fe529a698b6b522b98095e4438f',
-      'IDXMTILE001',
-      'IDXMTILE001'
+      '0x67Fd6c648083425D86Fa5dD400A0935f7311b338',
+      'REFRACTION',
+      'REFRACTION'
     ],
     {
-      chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 0x2A, // default to kovan (42)
-      gasLimit: 9999999,
+      chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 0x01, // default to kovan (42)
+      gasLimit: 4000000,
       gasPrice: ethers.utils.parseUnits('120', 'gwei')
     }
   )

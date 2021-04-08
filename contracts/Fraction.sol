@@ -9,11 +9,25 @@ import "./IFractional.sol";
 contract Fraction is IFractional, ERC20 {
     address public owner;
     ERC721 public nft;
+    uint public redeemAmount = 0;
+    uint public redeemFee = 0;
+    uint public expiry = 0;
+    uint public remainingNFTs = 0;
     bool public locked = false;
     
-    constructor (ERC721 _nft, string memory _name, string memory _symbol) ERC20(_name, _symbol) {
+    constructor (
+        ERC721 _nft, 
+        string memory _name, 
+        string memory _symbol,
+        uint _redeemAmount,
+        uint _expiry, 
+        uint _redeemFee
+    ) ERC20(_name, _symbol) {
         owner = address(0); // Be explicit about no ownership
         nft = _nft;
+        redeemAmount = _redeemAmount;
+        expiry = _expiry;
+        redeemFee = _redeemFee;
     }
 
     function fungify(uint[] memory _nftids, uint _total) public virtual override {
@@ -29,6 +43,11 @@ contract Fraction is IFractional, ERC20 {
         locked = true;
         
         emit Fraction(address(nft), address(owner), name(), symbol(), _total);
+    }
+
+
+    function redeem() public virtual override {
+
     }
 }
 

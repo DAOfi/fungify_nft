@@ -12,14 +12,14 @@ async function main() {
     wallet,
     Fraction,
     [
-      '0x67Fd6c648083425D86Fa5dD400A0935f7311b338',
-      'REFRACTION',
-      'REFRACTION'
+      '0x39491D431F97Adf4E1BdD919a1B62aA6C92E5001',
+      'TSUNAMI',
+      'TSUNAMI'
     ],
     {
       chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 0x01, // default to kovan (42)
-      gasLimit: 4000000,
-      gasPrice: ethers.utils.parseUnits('120', 'gwei')
+      gasLimit: 3000000,
+      gasPrice: ethers.utils.parseUnits('140', 'gwei')
     }
   )
   console.log('Fractional NFT deployted at:', fraction.address)

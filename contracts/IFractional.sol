@@ -10,8 +10,9 @@ interface IFractional {
      * @dev Emitted when `Fraction` tokens are minted from an NFT lock event
      */
     event Fraction(address nft, address owner, string name, string symbol, uint total);
-    event Redeem();
+    event Redeem(uint nftid);
 
     function fungify(uint[] memory _nftids, uint _total) external;
-    function redeem() external; 
+    function redeem() external payable; 
+    function withdrawFee() external;
 }

@@ -4,19 +4,22 @@ pragma solidity ^0.7.4;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import '@uniswap/lib/contracts/libraries/TransferHelper.sol';
 import "./IFractional.sol";
 
 contract Fraction is IFractional, ERC20 {
     address public owner;
+    address public feeBeneficiary;
     ERC721 public nft;
-    uint public redeemAmount = 0;
-    uint public redeemFee = 0;
-    uint public expiry = 0;
-    uint public remainingNFTs = 0;
-    bool public locked = false;
+    uint public redeemAmount = 0; // number of erc20 tokens needed to redeem
+    uint public redeemFee = 0; // fee in wei
+    uint public expiry = 0; // timestamp of expiration of redemption phase
+    uint public remainingNFTs = 0; // keep track of locked NFTs
+    bool public minted = false;
     
     constructor (
-        ERC721 _nft, 
+        ERC721 _nft,
+        address _feeBeneficiary,
         string memory _name, 
         string memory _symbol,
         uint _redeemAmount,
@@ -24,30 +27,45 @@ contract Fraction is IFractional, ERC20 {
         uint _redeemFee
     ) ERC20(_name, _symbol) {
         owner = address(0); // Be explicit about no ownership
+        feeBeneficiary = _feeBeneficiary;
         nft = _nft;
-        redeemAmount = _redeemAmount;
+        redeemAmount = _redeemAmount * (10 ** uint256(decimals()));
         expiry = _expiry;
         redeemFee = _redeemFee;
     }
 
     function fungify(uint[] memory _nftids, uint _total) public virtual override {
-        require(locked == false);
+        require(minted == false);
 
         for(uint i=0; i<_nftids.length; i++) {
             nft.transferFrom(msg.sender, address(this), _nftids[i]);
             require(nft.ownerOf(_nftids[i]) == address(this), "nft transfer failed");
+            remainingNFTs++;
         }
 
-        _mint(msg.sender, _total * (10 ** uint256(decimals())));
+        _mint(_msgSender(), _total * (10 ** uint256(decimals())));
 
-        locked = true;
+        minted = true;
         
         emit Fraction(address(nft), address(owner), name(), symbol(), _total);
     }
 
 
-    function redeem() public virtual override {
+    function redeem() public virtual override payable {
+        require(msg.value == redeemFee);
+        require(block.timestamp <= expiry);
+        require(remainingNFTs > 0);
+        require(balanceOf(msg.sender) >= redeemAmount);
 
+        remainingNFTs--;
+
+        _transfer(_msgSender(), address(this), redeemAmount);
+        nft.transferFrom(address(this), _msgSender(), remainingNFTs+1);
+        emit Redeem(remainingNFTs+1);
+    }
+
+    function withdrawFee() public virtual override {
+        TransferHelper.safeTransferETH(feeBeneficiary, address(this).balance);
     }
 }
 

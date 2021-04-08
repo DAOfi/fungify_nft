@@ -59,7 +59,7 @@ contract Fraction is IFractional, ERC20 {
 
         remainingNFTs--;
 
-        _transfer(_msgSender(), address(this), redeemAmount);
+        _transfer(_msgSender(), address(0), redeemAmount); // Burn the erc20 token
         nft.transferFrom(address(this), _msgSender(), remainingNFTs+1);
         emit Redeem(remainingNFTs+1);
     }

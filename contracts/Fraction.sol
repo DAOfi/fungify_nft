@@ -50,13 +50,13 @@ contract Fraction is IFractional, ERC20 {
         emit Fraction(address(nft), address(owner), name(), symbol(), _total);
     }
 
-
     function redeem() public virtual override payable {
         require(msg.value == redeemFee);
         require(block.timestamp <= expiry);
         require(remainingNFTs > 0);
         require(balanceOf(msg.sender) >= redeemAmount);
-
+        require(nft.ownerOf(remainingNFTs) == address(this), "nft transfer failed");
+        
         remainingNFTs--;
 
         _transfer(_msgSender(), address(this), redeemAmount);

@@ -75,11 +75,11 @@ describe('Fraction Tests:', () => {
     let id_array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
     await fraction.fungify(id_array, 45)
     expect(await fraction.balanceOf(wallet.address)).to.equal('45000000000000000000')
+    expect(await fraction.remainingNFTs()).to.equal(30)
   })
 
   it('redeems tokens for nft', async () => {
     const { nft, fraction } = tokenFixture
-    expect(await fraction.remainingNFTs()).to.equal(30)
     let uri = 'https://relay.daofi-api.com/qloudpleasr/1'
     for(var i=1; i<=30; i++) {
       await nft.approve(fraction.address, i)
@@ -88,9 +88,14 @@ describe('Fraction Tests:', () => {
 
     let id_array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
     await fraction.fungify(id_array, 45)
-    expect(await nft.ownerOf(30)).to.equal(fraction.address)
-    await fraction.redeem(30)
-    // expect(await nft.ownerOf(30)).to.equal(wallet.address)
-    // expect(await nft.ownerOf(29)).to.equal(fraction.address)
+
+    for(var i=1; i<=30; i++){
+      expect(await fraction.remainingNFTs()).to.equal(31-i)
+      expect(await nft.ownerOf(i)).to.equal(fraction.address)
+      await fraction.redeem(i)
+      expect(await nft.ownerOf(i)).to.equal(wallet.address)
+    }
+    expect(await fraction.remainingNFTs()).to.equal(0)
+    expect(await fraction.balanceOf(wallet.address)).to.equal(0)
   })
 })

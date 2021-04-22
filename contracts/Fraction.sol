@@ -17,13 +17,15 @@ contract Fraction is IFractional, ERC20 {
         ERC721 _nft,
         string memory _name, 
         string memory _symbol,
-        uint _redeemAmount
+        uint _redeemAmount,
+        uint _totalNFTs
     ) ERC20(_name, _symbol) {
         nft = _nft;
-        redeemAmount = _redeemAmount * (10 ** uint256(decimals()));
+        redeemAmount = _redeemAmount;
+        remainingNFTs = _totalNFTs;
     }
 
-    function fungify(uint[] memory _nftids, uint _total) public virtual override {
+    function fungify(uint[] memory _nftids, uint _total) public override {
         require(minted == false);
 
         for(uint i=0; i<_nftids.length; i++) {
@@ -37,15 +39,15 @@ contract Fraction is IFractional, ERC20 {
         minted = true;
     }
 
-    function redeemNFT() public virtual override {
+    function redeem(uint _token) public override {
         require(remainingNFTs > 0, "there are no more NFTs to redeem");
         require(balanceOf(msg.sender) >= redeemAmount, "sender does not have enough ERC20s");
-        require(nft.ownerOf(remainingNFTs) == address(this), "nft transfer failed");
+        require(nft.ownerOf(_token) == address(this), "nft transfer failed");
 
         remainingNFTs--;
 
-        _transfer(_msgSender(), address(0), redeemAmount); // Burn the erc20 token
-        nft.transferFrom(address(this), _msgSender(), remainingNFTs+1);
+        _transfer(_msgSender(), address(this), redeemAmount); // Burn the erc20 token
+        nft.transferFrom(address(this), _msgSender(), _token);
         emit Redeem(remainingNFTs+1);
     }
 }

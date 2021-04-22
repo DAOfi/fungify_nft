@@ -1,12 +1,14 @@
-import ArtToken from '../../artifacts/contracts/QLOUDPLSR.sol/QLOUDPLSR.json'
+import Fraction from '../../artifacts/contracts/Fraction.sol/Fraction.json'
+import NFT from '../../artifacts/contracts/test/NFT.sol/NFT.json'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/dist/src/signer-with-address'
 import "@nomiclabs/hardhat-ethers";
 import { ethers } from 'hardhat'
 import { deployContract } from 'ethereum-waffle'
 import { Contract } from 'ethers'
 
-export interface ArtTokenFixture {
-  artToken: Contract
+export interface FractionFixture {
+  fraction: Contract,
+  nft: Contract
 }
 
 export async function getFixtureWithParams(
@@ -15,12 +17,18 @@ export async function getFixtureWithParams(
   fromWallet: boolean = true
 ): Promise<any> {
 
-  const Token = await ethers.getContractFactory("QLOUDPLSR")
+  const _nft = await ethers.getContractFactory("NFT")
 
   // deploy tokens
-  const artToken = await Token.deploy() 
+  const nft = await _nft.deploy() 
+
+  const _fraction = await ethers.getContractFactory("Fraction")
+
+  // deploy tokens
+  const fraction = await _fraction.deploy(nft.address, 'QLOUDPLSR', 'QLOUDPLSR', '1500000000000000000', '30') 
 
   return {
-    artToken
+    fraction,
+    nft
   }
 }

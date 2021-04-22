@@ -12,9 +12,11 @@ async function main() {
     wallet,
     Fraction,
     [
-      '0x39491D431F97Adf4E1BdD919a1B62aA6C92E5001',
-      'TSUNAMI',
-      'TSUNAMI'
+      '0xe32be33e46706831412606D948b5E8B240dA4fB0',
+      '$QLOUDPLSR',
+      '$QLOUDPLSR',
+      '1500000000000000000',
+      30
     ],
     {
       chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 0x01, // default to kovan (42)

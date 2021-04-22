@@ -9,5 +9,5 @@ interface IFractional {
     event Redeem(uint nftid);
 
     function fungify(uint[] memory _nftids, uint _total) external;
-    function redeemNFT() external;
+    function redeem(uint _token) external;
 }
